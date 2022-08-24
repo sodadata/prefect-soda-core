@@ -1,6 +1,6 @@
-site_name: prefect-soda-core-collection
-site_url: https://sodadata.github.io/prefect-soda-core-collection
-repo_url: https://github.com/sodadata/prefect-soda-core-collection
+site_name: prefect-soda-core
+site_url: https://sodadata.github.io/prefect-soda-core
+repo_url: https://github.com/sodadata/prefect-soda-core
 edit_uri: /edit/main/docs/
 theme:
   name: material
@@ -43,7 +43,7 @@ plugins:
             show_signature: False
             heading_level: 1
       watch:
-        - prefect_soda_core_collection/
+        - prefect_soda_core/
         - README.md
 
 nav:

@@ -1,4 +1,4 @@
-# prefect-soda-core-collection
+# prefect-soda-core
 
 ## Welcome!
 
@@ -16,44 +16,44 @@ These tasks are designed to work with Prefect 2.0. For more information about ho
 
 ### Installation
 
-Install `prefect-soda-core-collection` with `pip`:
+Install `prefect-soda-core` with `pip`:
 
 ```bash
-pip install prefect-soda-core-collection
+pip install prefect-soda-core
 ```
 
 ### Write and run a flow
 
 ```python
 from prefect import flow
-from prefect_soda_core_collection.tasks import (
-    goodbye_prefect_soda_core_collection,
-    hello_prefect_soda_core_collection,
+from prefect_soda_core.tasks import (
+    goodbye_prefect_soda_core,
+    hello_prefect_soda_core,
 )
 
 
 @flow
 def example_flow():
-    hello_prefect_soda_core_collection
-    goodbye_prefect_soda_core_collection
+    hello_prefect_soda_core
+    goodbye_prefect_soda_core
 
 example_flow()
 ```
 
 ## Resources
 
-If you encounter any bugs while using `prefect-soda-core-collection`, feel free to open an issue in the [prefect-soda-core-collection](https://github.com/sodadata/prefect-soda-core-collection) repository.
+If you encounter any bugs while using `prefect-soda-core`, feel free to open an issue in the [prefect-soda-core](https://github.com/sodadata/prefect-soda-core) repository.
 
-If you have any questions or issues while using `prefect-soda-core-collection`, you can find help in either the [Prefect Discourse forum](https://discourse.prefect.io/) or the [Prefect Slack community](https://prefect.io/slack).
+If you have any questions or issues while using `prefect-soda-core`, you can find help in either the [Prefect Discourse forum](https://discourse.prefect.io/) or the [Prefect Slack community](https://prefect.io/slack).
 
 ## Development
 
-If you'd like to install a version of `prefect-soda-core-collection` for development, clone the repository and perform an editable install with `pip`:
+If you'd like to install a version of `prefect-soda-core` for development, clone the repository and perform an editable install with `pip`:
 
 ```bash
-git clone https://github.com/sodadata/prefect-soda-core-collection.git
+git clone https://github.com/sodadata/prefect-soda-core.git
 
-cd prefect-soda-core-collection/
+cd prefect-soda-core/
 
 pip install -e ".[dev]"
 

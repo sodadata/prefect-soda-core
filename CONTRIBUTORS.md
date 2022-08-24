@@ -15,6 +15,6 @@ We're currently looking for contributions for the following:
 
 And anything else you can think of!
 
-Uncertain about something? Let us help guide you by [submitting an issue](https://github.com/sodadata/prefect-soda-core-collection/issues).
+Uncertain about something? Let us help guide you by [submitting an issue](https://github.com/sodadata/prefect-soda-core/issues).
 
 For more information, please refer to our [MAINTAINERS](MAINTAINERS.md) guide.

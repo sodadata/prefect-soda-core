@@ -1,4 +1,4 @@
-from prefect_soda_core_collection.flows import hello_and_goodbye
+from prefect_soda_core.flows import hello_and_goodbye
 
 
 def test_hello_and_goodbye_flow():

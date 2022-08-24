@@ -1,24 +1,21 @@
 from prefect import flow
 
-from prefect_soda_core_collection.tasks import (
-    goodbye_prefect_soda_core_collection,
-    hello_prefect_soda_core_collection,
-)
+from prefect_soda_core.tasks import goodbye_prefect_soda_core, hello_prefect_soda_core
 
 
-def test_hello_prefect_soda_core_collection():
+def test_hello_prefect_soda_core():
     @flow
     def test_flow():
-        return hello_prefect_soda_core_collection()
+        return hello_prefect_soda_core()
 
     result = test_flow()
-    assert result == "Hello, prefect-soda-core-collection!"
+    assert result == "Hello, prefect-soda-core!"
 
 
-def goodbye_hello_prefect_soda_core_collection():
+def goodbye_hello_prefect_soda_core():
     @flow
     def test_flow():
-        return goodbye_prefect_soda_core_collection()
+        return goodbye_prefect_soda_core()
 
     result = test_flow()
-    assert result == "Goodbye, prefect-soda-core-collection!"
+    assert result == "Goodbye, prefect-soda-core!"

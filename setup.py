@@ -12,13 +12,13 @@ with open("README.md") as readme_file:
     readme = readme_file.read()
 
 setup(
-    name="prefect-soda-core-collection",
+    name="prefect-soda-core",
     description="Prefect 2.0 collection for Soda Core",
     license="Apache License 2.0",
     author="Soda Data NV.",
     author_email="vijay@soda.io",
     keywords="prefect",
-    url="https://github.com/sodadata/prefect-soda-core-collection",
+    url="https://github.com/sodadata/prefect-soda-core",
     long_description=readme,
     long_description_content_type="text/markdown",
     version=versioneer.get_version(),
