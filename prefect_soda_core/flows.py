@@ -1,10 +1,7 @@
 """This is an example flows module"""
 from prefect import flow
 
-from prefect_soda_core.tasks import (
-    goodbye_prefect_soda_core,
-    hello_prefect_soda_core,
-)
+from prefect_soda_core.tasks import goodbye_prefect_soda_core, hello_prefect_soda_core
 
 
 @flow
