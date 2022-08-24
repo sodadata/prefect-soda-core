@@ -1,1 +1,1 @@
-::: prefect_soda_core_collection.flows
+::: prefect_soda_core.flows

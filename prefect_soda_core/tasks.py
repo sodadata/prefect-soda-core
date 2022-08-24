@@ -3,22 +3,22 @@ from prefect import task
 
 
 @task
-def hello_prefect_soda_core_collection() -> str:
+def hello_prefect_soda_core() -> str:
     """
     Sample task that says hello!
 
     Returns:
         A greeting for your collection
     """
-    return "Hello, prefect-soda-core-collection!"
+    return "Hello, prefect-soda-core!"
 
 
 @task
-def goodbye_prefect_soda_core_collection() -> str:
+def goodbye_prefect_soda_core() -> str:
     """
     Sample task that says goodbye!
 
     Returns:
         A farewell for your collection
     """
-    return "Goodbye, prefect-soda-core-collection!"
+    return "Goodbye, prefect-soda-core!"

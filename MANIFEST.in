@@ -1,2 +1,2 @@
 include versioneer.py
-include prefect_soda_core_collection/_version.py
+include prefect_soda_core/_version.py

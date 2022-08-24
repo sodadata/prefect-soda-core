@@ -25,4 +25,4 @@ Released on ????? ?th, 20??.
 
 ### Added
 
-- `task_name` task - [#1](https://github.com/sodadata/prefect-soda-core-collection/pull/1)
+- `task_name` task - [#1](https://github.com/sodadata/prefect-soda-core/pull/1)

@@ -1,1 +1,1 @@
-::: prefect_soda_core_collection.tasks
+::: prefect_soda_core.tasks
