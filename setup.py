@@ -31,7 +31,7 @@ def get_extra_requires():
     extra_requires = {db_engine: f"soda-core-{db_engine}" for db_engine in db_engines}
 
     # Add dev deps
-    extra_requires["dev"] = install_requires
+    extra_requires["dev"] = dev_requires
 
     return extra_requires
 
