@@ -11,6 +11,36 @@ with open("requirements-dev.txt") as dev_requires_file:
 with open("README.md") as readme_file:
     readme = readme_file.read()
 
+
+def get_extra_requires():
+    # DB engines currently supported by Soda Core
+    # https://docs.soda.io/soda-core/installation.html#install
+    db_engines = {
+        "athena",
+        "redshift",
+        "spark-df",
+        "bigquery",
+        "db2",
+        "sqlserver",
+        "mysql",
+        "postgres",
+        "snowflake",
+        "trino",
+    }
+
+    # Generate extra requires for each db engine
+    extra_requires = {db_engine: f"soda-core-{db_engine}" for db_engine in db_engines}
+
+    # Add specific deps for soda-core-spark
+    extra_requires["spark-hive"] = "soda-core-spark[hive]"
+    extra_requires["spark-odbc"] = "soda-core-spark[odbc]"
+
+    # Add dev deps
+    extra_requires["dev"] = dev_requires
+
+    return extra_requires
+
+
 setup(
     name="prefect-soda-core",
     description="Prefect 2.0 collection for Soda Core",
@@ -26,7 +56,7 @@ setup(
     packages=find_packages(exclude=("tests", "docs")),
     python_requires=">=3.7",
     install_requires=install_requires,
-    extras_require={"dev": dev_requires},
+    extras_require=get_extra_requires(),
     classifiers=[
         "Natural Language :: English",
         "Intended Audience :: Developers",
