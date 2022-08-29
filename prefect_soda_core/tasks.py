@@ -24,13 +24,17 @@ def get_configured_scan(
         scan.add_configuration_yaml_file(
             file_path=configuration.configuration_yaml_file
         )
+    elif configuration.configuration_yaml_files:
+        scan.add_configuration_yaml_files(path=configuration.configuration_yaml_files)
     elif configuration.configuration_yaml_str:
         scan.add_configuration_yaml_str(
             environment_yaml_str=configuration.configuration_yaml_str
         )
 
     # Add checks
-    if checks.sodacl_yaml_files:
+    if checks.sodacl_yaml_file:
+        scan.add_sodacl_yaml_file(file_path=checks.sodacl_yaml_file)
+    elif checks.sodacl_yaml_files:
         scan.add_sodacl_yaml_files(path=checks.sodacl_yaml_files)
     elif checks.sodacl_yaml_str:
         scan.add_sodacl_yaml_str(sodacl_yaml_str=checks.sodacl_yaml_str)
