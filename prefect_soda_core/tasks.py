@@ -12,11 +12,21 @@ from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
 
 
-def get_configured_scan(
+def __get_configured_scan(
     scan: Scan, configuration: SodaConfiguration, checks: SodaCLCheck
 ) -> Scan:
     """
-    TODO
+    Configure a Soda scan using the provided configuration and checks.
+
+    Args:
+        scan: `Scan` object to configure.
+        configuration: `SodaConfiguration` object that contains configuration
+            details to be used to configure `scan`.
+        checks: `SodaCLCheck` object that contains checks details to be used
+            to configure `scan`.
+
+    Returns:
+        A properly configured `Scan` object.
     """
 
     # Add scan configuration
@@ -52,7 +62,34 @@ def soda_scan_execute(
     disable_telemetry: bool = False,
 ) -> Scan:
     """
-    TODO
+    Task that execute a Soda Scan.
+    First, the scan is created and configured using the provided
+    configuration, checks, and other options, and then
+    it is executed against the provided data source.
+
+    Args:
+        data_source_name: The name of the data source against
+            which the checks will be executed. The data source name
+            must match one of the data sources provided in the
+            `configuration` object.
+        configuration: `SodaConfiguration` object that will be used
+            to configure the scan before its execution.
+        checks: `SodaCLCheck` object that will be used, together with
+            `configuration`, to configure the scan before its execution.
+        variables: A `Dict[str, str]` that contains all variables
+            references within checks.
+        verbose: Whether to run the checks with a verbose log or not.
+            Default to `False`.
+        disable_telemetry: Whether to disable telemetry or not.
+            Default to `False`. For more information about
+            Soda telemetry, refer to the
+            [official docs](https://docs.soda.io/soda-core/usage-stats.html)
+
+    Returns:
+        `Scan` object containing the result collected after its execution.
+
+    Raises:
+        `SodaScanRunException` in case of Soda execution failure.
     """
 
     # Init Soda scan object
@@ -73,7 +110,7 @@ def soda_scan_execute(
         scan.disable_telemetry()
 
     # Configure the scan based on configuration and checks
-    scan = get_configured_scan(scan=scan, configuration=configuration, checks=checks)
+    scan = __get_configured_scan(scan=scan, configuration=configuration, checks=checks)
 
     ret = scan.execute()
 
