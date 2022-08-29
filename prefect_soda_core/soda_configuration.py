@@ -16,34 +16,27 @@ class SodaConfiguration(Block):
     """
 
     configuration_yaml_file: Optional[str]
-    configuration_yaml_env_var: Optional[str]
-    configuration_yaml_env_vars: Optional[str]
+    configuration_yaml_files: Optional[str]
     configuration_yaml_str: Optional[str]
 
     _block_type_name: Optional[str] = "Soda Configuration"
     _logo_url: Optional[HttpUrl] = "https://www.TODO.todo"  # noqa
 
     @root_validator(pre=True)
-    def check_configuration(cls, values):
+    def check_block_configuration(cls, values):
         """
         Ensure that at least one configuration option is passed
         """
         configuration_yaml_file_exists = bool(values.get("configuration_yaml_file"))
-        configuration_yaml_env_var_exists = bool(
-            values.get("configuration_yaml_env_var")
-        )
-        configuration_yaml_env_vars_exists = bool(
-            values.get("configuration_yaml_env_vars")
-        )
+        configuration_yaml_files_exists = bool(values.get("configuration_yaml_files"))
         configuration_yaml_str_exists = bool(values.get("configuration_yaml_str"))
 
         if not (
             configuration_yaml_file_exists
-            or configuration_yaml_env_var_exists
-            or configuration_yaml_env_vars_exists
+            or configuration_yaml_files_exists
             or configuration_yaml_str_exists
         ):
-            msg = "Please provide at least one Soda configuration option."
+            msg = "Please provide the path to either a configuration file, a configuration folder, or a configuration YAML string."  # noqa
             raise SodaConfigurationException(msg)
 
         return values
