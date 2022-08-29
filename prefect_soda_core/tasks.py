@@ -7,6 +7,7 @@ from typing import Dict, Optional
 from prefect import task
 from soda.scan import Scan
 
+from prefect_soda_core.exceptions import SodaScanRunException
 from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
 
@@ -70,6 +71,12 @@ def soda_scan_execute(
     # Configure the scan based on configuration and checks
     scan = get_configured_scan(scan=scan, configuration=configuration, checks=checks)
 
-    scan.execute()
+    ret = scan.execute()
+
+    # In case of errors, raise an exception with Soda errors
+    if ret == 3:
+        errors = scan.get_error_logs_text()
+        msg = f"Soda scan encountered an error: {errors}"
+        raise SodaScanRunException(msg)
 
     return scan
