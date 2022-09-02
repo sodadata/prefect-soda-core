@@ -1,4 +1,6 @@
+import pyfakefs  # noqa
 import pytest
+from yaml import safe_load
 
 from prefect_soda_core.exceptions import SodaConfigurationException
 from prefect_soda_core.soda_configuration import SodaConfiguration
@@ -41,3 +43,24 @@ def test_soda_configuration_construction_with_valid_yaml_succeed():
 
     assert sc.configuration_yaml_path == expected_path
     assert sc.configuration_yaml_str == expected_yaml
+
+
+def test_persist_configuration_succeed(fs):
+    expected_path = "/path/to/configuration.yaml"
+    expected_yaml = """
+    root:
+        a_list:
+            key1: val1
+            key2: val2
+    """
+    sc = SodaConfiguration(
+        configuration_yaml_path=expected_path, configuration_yaml_str=expected_yaml
+    )
+
+    fs.create_dir("/path/to/")
+    sc.persist_configuration()
+
+    with open(expected_path, "r") as f:
+        persisted_yaml = safe_load(stream=f)
+
+    assert persisted_yaml == expected_yaml
