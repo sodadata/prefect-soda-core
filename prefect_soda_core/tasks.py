@@ -2,65 +2,23 @@
 Collection of tasks that can be used to run Data Quality checks
 using Soda Core.
 """
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
-from prefect import task
-from soda.scan import Scan
+from prefect import get_run_logger, task
+from prefect_shell import shell_run_command
 
-from prefect_soda_core.exceptions import SodaScanRunException
 from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
 
 
-def __get_configured_scan(
-    scan: Scan, configuration: SodaConfiguration, checks: SodaCLCheck
-) -> Scan:
-    """
-    Configure a Soda scan using the provided configuration and checks.
-
-    Args:
-        scan: `Scan` object to configure.
-        configuration: `SodaConfiguration` object that contains configuration
-            details to be used to configure `scan`.
-        checks: `SodaCLCheck` object that contains checks details to be used
-            to configure `scan`.
-
-    Returns:
-        A properly configured `Scan` object.
-    """
-
-    # Add scan configuration
-    if configuration.configuration_yaml_file:
-        scan.add_configuration_yaml_file(
-            file_path=configuration.configuration_yaml_file
-        )
-    elif configuration.configuration_yaml_files:
-        scan.add_configuration_yaml_files(path=configuration.configuration_yaml_files)
-    elif configuration.configuration_yaml_str:
-        scan.add_configuration_yaml_str(
-            environment_yaml_str=configuration.configuration_yaml_str
-        )
-
-    # Add checks
-    if checks.sodacl_yaml_file:
-        scan.add_sodacl_yaml_file(file_path=checks.sodacl_yaml_file)
-    elif checks.sodacl_yaml_files:
-        scan.add_sodacl_yaml_files(path=checks.sodacl_yaml_files)
-    elif checks.sodacl_yaml_str:
-        scan.add_sodacl_yaml_str(sodacl_yaml_str=checks.sodacl_yaml_str)
-
-    return scan
-
-
 @task
-def soda_scan_execute(
+async def soda_scan_execute(
     data_source_name: str,
     configuration: SodaConfiguration,
     checks: SodaCLCheck,
     variables: Optional[Dict[str, str]],
     verbose: bool = False,
-    disable_telemetry: bool = False,
-) -> Scan:
+) -> List[str]:
     """
     Task that execute a Soda Scan.
     First, the scan is created and configured using the provided
@@ -80,10 +38,6 @@ def soda_scan_execute(
             references within checks.
         verbose: Whether to run the checks with a verbose log or not.
             Default to `False`.
-        disable_telemetry: Whether to disable telemetry or not.
-            Default to `False`. For more information about
-            Soda telemetry, refer to the
-            [official docs](https://docs.soda.io/soda-core/usage-stats.html)
 
     Returns:
         `Scan` object containing the result collected after its execution.
@@ -91,33 +45,30 @@ def soda_scan_execute(
     Raises:
         `SodaScanRunException` in case of Soda execution failure.
     """
+    configuration.persist_configuration()
+    checks.persist_checks()
 
-    # Init Soda scan object
-    scan = Scan()
+    command = (
+        f"soda scan -d {data_source_name} -c {configuration.configuration_yaml_path}"
+    )
 
-    # Set the main data source where checks will be performed
-    scan.set_data_source_name(data_source_name=data_source_name)
-
-    # Set log verbosity
-    scan.set_verbose(verbose_var=verbose)
-
-    # Add scan variables, if any
     if variables:
-        scan.add_variables(variables=variables)
+        var_str = "".join(
+            [
+                f'-v "{var_name}={var_value}" '
+                for var_name, var_value in variables.items()
+            ]
+        )
 
-    # Disable telemetry if needed
-    if disable_telemetry:
-        scan.disable_telemetry()
+        command = f"{command} {var_str}"
 
-    # Configure the scan based on configuration and checks
-    scan = __get_configured_scan(scan=scan, configuration=configuration, checks=checks)
+    if verbose:
+        command = f"{command} -V"
 
-    ret = scan.execute()
+    command = f"{command} {checks.sodacl_yaml_path}"
 
-    # In case of errors, raise an exception with Soda errors
-    if ret == 3:
-        errors = scan.get_error_logs_text()
-        msg = f"Soda scan encountered an error: {errors}"
-        raise SodaScanRunException(msg)
+    get_run_logger().debug(f"Command is: {command}")
 
-    return scan
+    soda_logs = await shell_run_command.fn(command=command, return_all=True)
+
+    return soda_logs
