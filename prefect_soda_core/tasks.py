@@ -2,7 +2,7 @@
 Collection of tasks that can be used to run Data Quality checks
 using Soda Core.
 """
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from prefect import get_run_logger, task
 from prefect_shell import shell_run_command
@@ -18,7 +18,7 @@ async def soda_scan_execute(
     checks: SodaCLCheck,
     variables: Optional[Dict[str, str]],
     verbose: bool = False,
-) -> List[str]:
+) -> Union[List, str]:
     """
     Task that execute a Soda Scan.
     First, the scan is created and configured using the provided
@@ -40,18 +40,20 @@ async def soda_scan_execute(
             Default to `False`.
 
     Returns:
-        `Scan` object containing the result collected after its execution.
-
-    Raises:
-        `SodaScanRunException` in case of Soda execution failure.
+        Logs produced by running `soda scan` CLI command.
     """
+    # Persist the configuration on the file system, if necessary
     configuration.persist_configuration()
+
+    # Perists checks on the file system, if necessary
     checks.persist_checks()
 
+    # Soda command initial definition
     command = (
         f"soda scan -d {data_source_name} -c {configuration.configuration_yaml_path}"
     )
 
+    # If variables are provided, add the to Soda command
     if variables:
         var_str = "".join(
             [
@@ -62,13 +64,17 @@ async def soda_scan_execute(
 
         command = f"{command} {var_str}"
 
+    # If verbose logging is requested, add corresponding option to Soda command
     if verbose:
         command = f"{command} -V"
 
+    # Build final Soda command
     command = f"{command} {checks.sodacl_yaml_path}"
 
-    get_run_logger().debug(f"Command is: {command}")
+    # Log Soda command for debuggin purpose
+    get_run_logger().debug(f"Soda requested command is: {command}")
 
+    # Execute Soda command
     soda_logs = await shell_run_command.fn(command=command, return_all=True)
 
     return soda_logs
