@@ -1,4 +1,3 @@
-from typing import List, Union
 from unittest import mock
 
 import pytest
@@ -9,7 +8,7 @@ from prefect_soda_core.sodacl_check import SodaCLCheck
 from prefect_soda_core.tasks import soda_scan_execute
 
 
-def _mock_shell_run_command_fn(**kwargs) -> Union[List, str]:
+def _mock_shell_run_command_fn(**kwargs):
     msg = "this is the log"
     return msg.split(" ")
 
