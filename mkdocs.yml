@@ -48,6 +48,8 @@ plugins:
 
 nav:
     - Home: index.md
+    - Exceptions: exceptions.md
+    - Configuration: configuration.md
+    - Checks: checks.md
     - Tasks: tasks.md
-    - Flows: flows.md
 
