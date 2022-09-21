@@ -11,10 +11,23 @@ from prefect_soda_core.exceptions import SodaConfigurationException
 
 class SodaConfiguration(Block):
     """
-    This block can be used to configuration required
-    to run Soda scans.
+    This block can be used to provide the configuration
+    required to run Soda scans.
     For more information, please refer to the
     [official docs](https://docs.soda.io/soda-core/configuration.html#configuration-instructions)  # noqa
+
+    Args:
+        configuration_yaml_path (str): Absolute path of the Soda configuration file.
+        configuration_yaml_str (str): Optional YAML string containing the Soda configuration
+            details. If provided, it will be saved
+            at the path provided with `configuration_yaml_path`.
+
+    Example:
+        Load stored Soda configuration.
+        ```python
+        from prefect_soda_core.soda_configuration import SodaConfiguration
+        soda_configuration_block = SodaConfiguration.load("BLOCK_NAME")
+        ```
     """
 
     configuration_yaml_path: str

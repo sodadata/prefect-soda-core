@@ -9,11 +9,3 @@ class SodaConfigurationException(Exception):
     """
 
     pass
-
-
-class SodaScanRunException(Exception):
-    """
-    Exception to raise in case of issues during Soda scan runs
-    """
-
-    pass

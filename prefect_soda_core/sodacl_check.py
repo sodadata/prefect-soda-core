@@ -12,6 +12,18 @@ from prefect_soda_core.exceptions import SodaConfigurationException
 class SodaCLCheck(Block):
     """
     This block represents a SodaCL check that can be used when running Soda scans.
+
+    Args:
+        sodacl_yaml_path (str): Absolute path of the Soda Checks file.
+        sodacl_yaml_str (str): Optional YAML string containing the Soda Checks
+            details. If provided, it will be saved
+            at the path provided with `sodacl_yaml_path`.
+
+    Example:
+        ```python
+        from prefect_soda_core.sodacl_check import SodaCLCheck
+        sodacl_check_block = SodaCLCheck.load("BLOCK_NAME")
+        ```
     """
 
     sodacl_yaml_path: str

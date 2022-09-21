@@ -39,8 +39,34 @@ async def soda_scan_execute(
         verbose: Whether to run the checks with a verbose log or not.
             Default to `False`.
 
+    Raises:
+        `RuntimeError` in case `soda scan` encounters any error
+            during execution.
+
     Returns:
         Logs produced by running `soda scan` CLI command.
+
+    Example:
+        ```python
+        from prefect_soda_core.sodacl_check import SodaCLCheck
+        from prefect_soda_core.soda_configuration import SodaConfiguration
+        from prefect_soda_core.tasks import soda_scan_execute
+
+        from prefect import flow
+
+        sodacl_check_block = SodaCLCheck.load("SODACL_CHECK_BLOCK_NAME")
+        soda_configuration_block = SodaConfiguration.load("SODA_CONF_BLOCK_NAME")
+
+        @flow
+        def run_soda_scan():
+            return soda_scan_execute(
+                data_source_name="datasource",
+                configuration=soda_configuration_block,
+                checks=sodacl_check_block,
+                variables={"key": "value"},
+                verbose=False
+            )
+        ```
     """
     # Persist the configuration on the file system, if necessary
     configuration.persist_configuration()
