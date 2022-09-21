@@ -39,7 +39,13 @@ class SodaConfiguration(Block):
     @root_validator(pre=True)
     def check_block_configuration(cls, values):
         """
-        Ensure that the configuration options are valid
+        Ensure that the configuration options are valid.
+        A configuration is valid if it provides just the path to the
+        YAML configuration file or if it has both the path
+        to the configuration file and a valid YAML configuration string.
+
+        Raises:
+            SodaConfigurationException: When the provided configuration is not valid.
         """
         configuration_yaml_str_exists = bool(values.get("configuration_yaml_str"))
 
@@ -57,7 +63,7 @@ class SodaConfiguration(Block):
     def persist_configuration(self):
         """
         Persist Soda configuration on the file system, if necessary.
-        Please note that, if the path already exists, it will be overwritten
+        Please note that, if the path already exists, it will be overwritten.
         """
 
         # If a YAML string and path are passed, then persist the configuration
