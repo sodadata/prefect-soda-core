@@ -26,18 +26,29 @@ pip install prefect-soda-core
 
 ```python
 from prefect import flow
-from prefect_soda_core.tasks import (
-    goodbye_prefect_soda_core,
-    hello_prefect_soda_core,
-)
+from prefect_soda_core.soda_configuration import SodaConfiguration
+from prefect_soda_core.sodacl_check import SodaCLCheck
+from prefect_soda_core.tasks import soda_scan_execute
 
 
 @flow
-def example_flow():
-    hello_prefect_soda_core
-    goodbye_prefect_soda_core
+def run_soda_scan():
+    soda_configuration_block = SodaConfiguration(
+        configuration_yaml_path="/path/to/config.yaml"
+    )
+    sodacl_check_block = SodaCLCheck(
+        sodacl_yaml_path="/path/to/checks.yaml"
+    )
+    
+    return soda_scan_execute(
+        data_source_name="my_datasource",
+        configuration=soda_configuration_block,
+        checks=soda_check_block,
+        variables={"var": "value"},
+        verbose=True
+    )
 
-example_flow()
+run_soda_scan()
 ```
 
 ## Resources
