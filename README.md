@@ -16,11 +16,18 @@ These tasks are designed to work with Prefect 2.0. For more information about ho
 
 ### Installation
 
-Install `prefect-soda-core` with `pip`:
+
+`prefect-soda-core` is based on `soda-core`.  
+As `soda-core` requires you to specify the right option for your database, so does `prefect-soda-core`.  
+I.e. to use `prefect-soda-core` with Snowflake, run the following:
 
 ```bash
-pip install prefect-soda-core
+pip install prefect-soda-core[snowflake]
 ```
+
+You can find the list of supported options in `setup.py`.
+
+**Please note that since this integration is built on top of Soda CLI, it is not possible to run data quality checks using Spark.**
 
 ### Write and run a flow
 
