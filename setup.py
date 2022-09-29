@@ -31,9 +31,9 @@ def get_extra_requires():
     # Generate extra requires for each db engine
     extra_requires = {db_engine: f"soda-core-{db_engine}" for db_engine in db_engines}
 
-    # Add specific deps for soda-core-spark
-    extra_requires["spark-hive"] = "soda-core-spark[hive]"
-    extra_requires["spark-odbc"] = "soda-core-spark[odbc]"
+    # Does not work with the current cli-based integration
+    # extra_requires["spark-hive"] = "soda-core-spark[hive]"
+    # extra_requires["spark-odbc"] = "soda-core-spark[odbc]"
 
     # Add dev deps
     extra_requires["dev"] = dev_requires
