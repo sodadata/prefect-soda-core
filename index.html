@@ -479,9 +479,13 @@
 <p>We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.</p>
 <p>These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the <a href="https://orion-docs.prefect.io/">Prefect documentation</a>.</p>
 <h3 id="installation">Installation</h3>
-<p>Install <code>prefect-soda-core</code> with <code>pip</code>:</p>
-<div class="highlight"><pre><span></span><code>pip install prefect-soda-core
+<p><code>prefect-soda-core</code> is based on <code>soda-core</code>.<br />
+As <code>soda-core</code> requires you to specify the right option for your database, so does <code>prefect-soda-core</code>.<br />
+I.e. to use <code>prefect-soda-core</code> with Snowflake, run the following:</p>
+<div class="highlight"><pre><span></span><code>pip install prefect-soda-core<span class="o">[</span>snowflake<span class="o">]</span>
 </code></pre></div>
+<p>You can find the list of supported options in <code>setup.py</code>.</p>
+<p><strong>Please note that since this integration is built on top of Soda CLI, it is not possible to run data quality checks using Spark.</strong></p>
 <h3 id="write-and-run-a-flow">Write and run a flow</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">flow</span>
 <span class="kn">from</span> <span class="nn">prefect_soda_core.soda_configuration</span> <span class="kn">import</span> <span class="n">SodaConfiguration</span>
