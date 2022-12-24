@@ -498,14 +498,14 @@ I.e. to use <code>prefect-soda-core</code> with Snowflake, run the following:</p
     <span class="n">soda_configuration_block</span> <span class="o">=</span> <span class="n">SodaConfiguration</span><span class="p">(</span>
         <span class="n">configuration_yaml_path</span><span class="o">=</span><span class="s2">&quot;/path/to/config.yaml&quot;</span>
     <span class="p">)</span>
-    <span class="n">sodacl_check_block</span> <span class="o">=</span> <span class="n">SodaCLCheck</span><span class="p">(</span>
+    <span class="n">soda_check_block</span> <span class="o">=</span> <span class="n">SodaCLCheck</span><span class="p">(</span>
         <span class="n">sodacl_yaml_path</span><span class="o">=</span><span class="s2">&quot;/path/to/checks.yaml&quot;</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">soda_scan_execute</span><span class="p">(</span>
         <span class="n">data_source_name</span><span class="o">=</span><span class="s2">&quot;my_datasource&quot;</span><span class="p">,</span>
         <span class="n">configuration</span><span class="o">=</span><span class="n">soda_configuration_block</span><span class="p">,</span>
-        <span class="n">checks</span><span class="o">=</span><span class="n">sodacl_yaml_path</span><span class="p">,</span>
+        <span class="n">checks</span><span class="o">=</span><span class="n">soda_check_block</span><span class="p">,</span>
         <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;var&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">},</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
