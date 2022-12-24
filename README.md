@@ -50,7 +50,7 @@ def run_soda_scan():
     return soda_scan_execute(
         data_source_name="my_datasource",
         configuration=soda_configuration_block,
-        checks=soda_check_block,
+        checks=sodacl_yaml_path,
         variables={"var": "value"},
         verbose=True
     )
