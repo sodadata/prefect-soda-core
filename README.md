@@ -43,14 +43,14 @@ def run_soda_scan():
     soda_configuration_block = SodaConfiguration(
         configuration_yaml_path="/path/to/config.yaml"
     )
-    sodacl_check_block = SodaCLCheck(
+    soda_check_block = SodaCLCheck(
         sodacl_yaml_path="/path/to/checks.yaml"
     )
     
     return soda_scan_execute(
         data_source_name="my_datasource",
         configuration=soda_configuration_block,
-        checks=sodacl_yaml_path,
+        checks=soda_check_block,
         variables={"var": "value"},
         verbose=True
     )
