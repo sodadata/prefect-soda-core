@@ -17,6 +17,7 @@ async def soda_scan_execute(
     configuration: SodaConfiguration,
     checks: SodaCLCheck,
     variables: Optional[Dict[str, str]],
+    scan_results_file: Optional[str] = None,
     verbose: bool = False,
 ) -> Union[List, str]:
     """
@@ -36,6 +37,10 @@ async def soda_scan_execute(
             `configuration`, to configure the scan before its execution.
         variables: A `Dict[str, str]` that contains all variables
             references within checks.
+        scan_results_file: The path to the file where the scan results
+            will be stored. If not provided, the scan results will not
+            be stored on the file system and only the stdout of the soda
+            shell task would be returned.
         verbose: Whether to run the checks with a verbose log or not.
             Default to `False`.
 
@@ -64,7 +69,8 @@ async def soda_scan_execute(
                 configuration=soda_configuration_block,
                 checks=sodacl_check_block,
                 variables={"key": "value"},
-                verbose=False
+                scan_results_file="scan_output.json",
+                verbose=False,
             )
         ```
     """
@@ -89,6 +95,10 @@ async def soda_scan_execute(
         )
 
         command = f"{command} {var_str}"
+
+    # If scan results file is provided, add the to Soda command
+    if scan_results_file:
+        command = f"{command} -srf {scan_results_file}"
 
     # If verbose logging is requested, add corresponding option to Soda command
     if verbose:
