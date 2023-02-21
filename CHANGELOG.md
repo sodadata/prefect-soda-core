@@ -26,3 +26,13 @@ Released on ????? ?th, 20??.
 ### Added
 
 - `task_name` task - [#1](https://github.com/sodadata/prefect-soda-core/pull/1)
+
+
+## 0.1.1
+
+Released on ????? ?th, 20??.
+
+### Changed
+
+- `soda_scan_execute` task to accept `scan_results_file` as a param, allowing the soda scan results to be saved as JSON on the machine running it.
+
