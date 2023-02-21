@@ -47,11 +47,16 @@ def run_soda_scan():
         sodacl_yaml_path="/path/to/checks.yaml"
     )
     
+    # Using the flow_run_name as the name of the file to store the scan results
+    flow_run_name = get_run_context().flow_run.name
+    scan_results_file_path = f"{flow_run_name}.json"
+    
     return soda_scan_execute(
         data_source_name="my_datasource",
         configuration=soda_configuration_block,
         checks=soda_check_block,
         variables={"var": "value"},
+        scan_results_file=scan_results_file_path,
         verbose=True
     )
 
