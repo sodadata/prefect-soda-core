@@ -58,6 +58,8 @@ def run_soda_scan():
         variables={"var": "value"},
         scan_results_file=scan_results_file_path,
         verbose=True
+        return_scan_result_file_content=False,
+        shell_env={"SNOWFLAKE_PASSWORD": "********"}
     )
 
 run_soda_scan()
