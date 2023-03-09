@@ -6,8 +6,8 @@ import json
 from typing import Dict, List, Optional, Union
 
 from prefect import get_run_logger, task
-from prefect_shell import shell_run_command
 from prefect.context import get_run_context
+from prefect_shell import shell_run_command
 
 from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
@@ -110,7 +110,8 @@ async def soda_scan_execute(
 
     # If return_scan_result_file_content is True, save the output of the scan to a file
     if return_scan_result_file_content is True:
-        # Implicitly use task run name and time to store the JSON-based scan results file
+        # Implicitly use task run name and time
+        # to store the JSON-based scan results file
         if scan_results_file is None:
             task_run_name = get_run_context().task_run.name
             task_run_start_time = get_run_context().task_run.start_time
@@ -135,7 +136,8 @@ async def soda_scan_execute(
         )
     except RuntimeError as e:
         # Ignoring the Runtime Error with code 2 that is raised
-        #   when the soda test runs successfully but the check fails causing the flow to break.
+        #   when the soda test runs successfully but the check
+        #   fails causing the flow to break.
         if not str(e).startswith("Command failed with exit code 2:"):
             raise e
 
