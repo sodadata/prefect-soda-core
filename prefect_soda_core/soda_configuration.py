@@ -34,7 +34,9 @@ class SodaConfiguration(Block):
     configuration_yaml_str: Optional[str]
 
     _block_type_name: Optional[str] = "Soda Configuration"
-    _logo_url: Optional[HttpUrl] = "https://www.TODO.todo"  # noqa
+    _logo_url: Optional[
+        HttpUrl
+    ] = "https://github.com/PrefectHQ/prefect/blob/main/docs/img/collections/soda.png"  # noqa
 
     @root_validator(pre=True)
     def check_block_configuration(cls, values):
