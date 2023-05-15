@@ -62,3 +62,32 @@ async def test_soda_scan_execute_succeed(mock_shell_run_command_fn):
     flow_result = await test_flow()
 
     assert flow_result == "this is the log".split(" ")
+
+
+@mock.patch("prefect_soda_core.tasks.shell_run_command.fn")
+@mock.patch("builtins.open", mock.mock_open(read_data='{"result": "fake"}'))
+async def test_soda_scan_execute_return_scan_result_file_content_succeed(
+    mock_shell_run_command_fn,
+):
+    mock_shell_run_command_fn.return_value = _mock_shell_run_command_fn()
+
+    @flow(name="test_soda_scan_execute_return_scan_result_content_file_succeed")
+    async def test_flow():
+        result = await soda_scan_execute(
+            data_source_name="test",
+            configuration=SodaConfiguration(
+                configuration_yaml_path="/path/to/config.yaml",
+                configuration_yaml_str=None,
+            ),
+            checks=SodaCLCheck(
+                sodacl_yaml_path="/path/to/checks.yaml", sodacl_yaml_str=None
+            ),
+            variables={"foo": "bar"},
+            verbose=True,
+            return_scan_result_file_content=True,
+        )
+        return result
+
+    flow_result = await test_flow()
+
+    assert flow_result == {"result": "fake"}
