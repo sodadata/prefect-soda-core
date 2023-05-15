@@ -65,7 +65,9 @@ async def test_soda_scan_execute_succeed(mock_shell_run_command_fn):
 
 
 @mock.patch("prefect_soda_core.tasks.shell_run_command.fn")
-@mock.patch("builtins.open", mock.mock_open(read_data='{"result": "fake"}'))
+@mock.patch(
+    "builtins.open", new=mock.mock_open(read_data='{"result": "fake"}'), create=True
+)
 async def test_soda_scan_execute_return_scan_result_file_content_succeed(
     mock_shell_run_command_fn,
 ):
