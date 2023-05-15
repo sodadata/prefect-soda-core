@@ -65,13 +65,14 @@ async def test_soda_scan_execute_succeed(mock_shell_run_command_fn):
 
 
 @mock.patch("prefect_soda_core.tasks.shell_run_command.fn")
-@mock.patch(
-    "builtins.open", new=mock.mock_open(read_data='{"result": "fake"}'), create=True
-)
 async def test_soda_scan_execute_return_scan_result_file_content_succeed(
-    mock_shell_run_command_fn,
+    mock_shell_run_command_fn, tmp_path
 ):
     mock_shell_run_command_fn.return_value = _mock_shell_run_command_fn()
+    scan_result_file_path = f"{tmp_path}/scan_result_file.json"
+
+    with open(scan_result_file_path, "w") as f:
+        f.write('{"result": "fake"}')
 
     @flow(name="test_soda_scan_execute_return_scan_result_content_file_succeed")
     async def test_flow():
@@ -87,6 +88,7 @@ async def test_soda_scan_execute_return_scan_result_file_content_succeed(
             variables={"foo": "bar"},
             verbose=True,
             return_scan_result_file_content=True,
+            scan_results_file=scan_result_file_path,
         )
         return result
 
