@@ -503,12 +503,19 @@ I.e. to use <code>prefect-soda-core</code> with Snowflake, run the following:</p
         <span class="n">sodacl_yaml_path</span><span class="o">=</span><span class="s2">&quot;/path/to/checks.yaml&quot;</span>
     <span class="p">)</span>
 
+    <span class="c1"># Using the flow_run_name as the name of the file to store the scan results</span>
+    <span class="n">flow_run_name</span> <span class="o">=</span> <span class="n">get_run_context</span><span class="p">()</span><span class="o">.</span><span class="n">flow_run</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">scan_results_file_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flow_run_name</span><span class="si">}</span><span class="s2">.json&quot;</span>
+
     <span class="k">return</span> <span class="n">soda_scan_execute</span><span class="p">(</span>
         <span class="n">data_source_name</span><span class="o">=</span><span class="s2">&quot;my_datasource&quot;</span><span class="p">,</span>
         <span class="n">configuration</span><span class="o">=</span><span class="n">soda_configuration_block</span><span class="p">,</span>
         <span class="n">checks</span><span class="o">=</span><span class="n">soda_check_block</span><span class="p">,</span>
         <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;var&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">},</span>
+        <span class="n">scan_results_file</span><span class="o">=</span><span class="n">scan_results_file_path</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">return_scan_result_file_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">shell_env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;SNOWFLAKE_PASSWORD&quot;</span><span class="p">:</span> <span class="s2">&quot;********&quot;</span><span class="p">}</span>
     <span class="p">)</span>
 
 <span class="n">run_soda_scan</span><span class="p">()</span>
