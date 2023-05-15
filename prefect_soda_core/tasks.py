@@ -2,9 +2,11 @@
 Collection of tasks that can be used to run Data Quality checks
 using Soda Core.
 """
+import json
 from typing import Dict, List, Optional, Union
 
 from prefect import get_run_logger, task
+from prefect.context import get_run_context
 from prefect_shell import shell_run_command
 
 from prefect_soda_core.soda_configuration import SodaConfiguration
@@ -17,7 +19,10 @@ async def soda_scan_execute(
     configuration: SodaConfiguration,
     checks: SodaCLCheck,
     variables: Optional[Dict[str, str]],
+    scan_results_file: Optional[str] = None,
     verbose: bool = False,
+    return_scan_result_file_content: bool = False,
+    shell_env: Optional[Dict[str, str]] = None,
 ) -> Union[List, str]:
     """
     Task that execute a Soda Scan.
@@ -36,8 +41,18 @@ async def soda_scan_execute(
             `configuration`, to configure the scan before its execution.
         variables: A `Dict[str, str]` that contains all variables
             references within checks.
+        scan_results_file: The path to the file where the scan results
+            will be stored. If not provided, the scan results will not
+            be stored on the file system and only the stdout of the soda
+            shell task would be returned.
         verbose: Whether to run the checks with a verbose log or not.
             Default to `False`.
+        return_scan_result_file_content: Controls the return of the task.
+            If `True`, the task will return the content of the scan results,
+            otherwise it will return the stdout of the soda shell task.
+            Default to `False`.
+        shell_env: A `Dict[str, str]` that contains all environment variables
+            that will be passed to the soda shell task.
 
     Raises:
         `RuntimeError` in case `soda scan` encounters any error
@@ -64,7 +79,10 @@ async def soda_scan_execute(
                 configuration=soda_configuration_block,
                 checks=sodacl_check_block,
                 variables={"key": "value"},
-                verbose=False
+                scan_results_file="scan_results.json",
+                verbose=False,
+                return_scan_result_file_content=False,
+                shell_env={"SNOWFLAKE_PASSWORD": "********"}
             )
         ```
     """
@@ -90,6 +108,17 @@ async def soda_scan_execute(
 
         command = f"{command} {var_str}"
 
+    # If return_scan_result_file_content is True, save the output of the scan to a file
+    if return_scan_result_file_content is True:
+        # Implicitly use task run name and time to store
+        #   the JSON-based scan results file
+        if scan_results_file is None:
+            task_run_name = get_run_context().task_run.name
+            task_run_start_time = get_run_context().task_run.start_time
+            scan_results_file = f"{task_run_start_time}--{task_run_name}.json"
+
+        command = f"{command} -srf {scan_results_file}"
+
     # If verbose logging is requested, add corresponding option to Soda command
     if verbose:
         command = f"{command} -V"
@@ -101,6 +130,19 @@ async def soda_scan_execute(
     get_run_logger().debug(f"Soda requested command is: {command}")
 
     # Execute Soda command
-    soda_logs = await shell_run_command.fn(command=command, return_all=True)
+    try:
+        soda_logs = await shell_run_command.fn(
+            command=command, env=shell_env, return_all=True
+        )
+    except RuntimeError as e:
+        # Ignoring the Runtime Error with code 2 that is raised
+        #   when the soda test runs successfully but the check fails
+        #   causing the flowto break.
+        if not str(e).startswith("Command failed with exit code 2:"):
+            raise e
+
+    if return_scan_result_file_content is True:
+        with open(scan_results_file, "r") as f:
+            soda_logs = json.load(f)
 
     return soda_logs
