@@ -129,19 +129,22 @@ async def soda_scan_execute(
     # Log Soda command for debuggin purpose
     get_run_logger().debug(f"Soda requested command is: {command}")
 
-    # Execute Soda command
+    # Init soda_logs
+    soda_logs = []
     try:
+        # Execute Soda command
         soda_logs = await shell_run_command.fn(
             command=command, env=shell_env, return_all=True
         )
     except RuntimeError as e:
         # Ignoring the Runtime Error with code 2 that is raised
         #   when the soda test runs successfully but the check fails
-        #   causing the flowto break.
+        #   causing the flow to break.
         if not str(e).startswith("Command failed with exit code 2:"):
             raise e
 
     if return_scan_result_file_content is True:
+        # Get logs from scan result file
         with open(scan_results_file, "r") as f:
             soda_logs = json.load(f)
 
