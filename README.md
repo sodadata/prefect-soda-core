@@ -33,6 +33,7 @@ You can find the list of supported options in `setup.py`.
 
 ```python
 from prefect import flow
+from prefect.context import get_run_context
 from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
 from prefect_soda_core.tasks import soda_scan_execute
