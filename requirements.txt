@@ -1,4 +1,4 @@
 prefect>=2.0.0
 prefect_shell
 soda-core
-pydantic<2
+pydantic<3
