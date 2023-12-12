@@ -33,6 +33,7 @@ You can find the list of supported options in `setup.py`.
 
 ```python
 from prefect import flow
+from prefect.context import get_run_context
 from prefect_soda_core.soda_configuration import SodaConfiguration
 from prefect_soda_core.sodacl_check import SodaCLCheck
 from prefect_soda_core.tasks import soda_scan_execute
@@ -57,7 +58,7 @@ def run_soda_scan():
         checks=soda_check_block,
         variables={"var": "value"},
         scan_results_file=scan_results_file_path,
-        verbose=True
+        verbose=True,
         return_scan_result_file_content=False,
         shell_env={"SNOWFLAKE_PASSWORD": "********"}
     )
